@@ -392,7 +392,12 @@ export default function EmployeeDashboard() {
               <div key={`empty-${i}`} className="calendar-day empty"></div>
             ))}
             {calendarDays.map((day) => {
-              const isToday = day.date === new Date().toISOString().slice(0, 10);
+              const now = new Date();
+
+            const localToday =
+           `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+
+              const isToday = day.date === localToday;
               const hasData = day.status !== 'UPCOMING' && day.status !== 'ABSENT';
               const dayClass = day.status === 'ABSENT' ? '' : statusClass(day.status);
               return (
