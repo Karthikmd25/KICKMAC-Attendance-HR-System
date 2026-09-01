@@ -5,9 +5,12 @@ const { checkLocationStatus, getDistanceInMeters } = require('../utils/geofence'
 // Helper: get today's date as YYYY-MM-DD (server's local date)
 const getTodayDateString = () => {
   const now = new Date();
-  const yyyy = now.getFullYear();
-  const mm = String(now.getMonth() + 1).padStart(2, '0');
-  const dd = String(now.getDate()).padStart(2, '0');
+  // Convert to IST (UTC+5:30) regardless of server's local timezone
+  const istOffsetMs = 5.5 * 60 * 60 * 1000;
+  const istNow = new Date(now.getTime() + istOffsetMs);
+  const yyyy = istNow.getUTCFullYear();
+  const mm = String(istNow.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(istNow.getUTCDate()).padStart(2, '0');
   return `${yyyy}-${mm}-${dd}`;
 };
 

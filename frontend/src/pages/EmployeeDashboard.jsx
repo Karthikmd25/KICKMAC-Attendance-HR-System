@@ -15,9 +15,16 @@ const formatWorkingHours = (hours) => {
   return `${Math.floor(totalMinutes / 60)}h ${totalMinutes % 60}m`;
 };
 
-const formatDate = (value) => new Date(`${value}T00:00:00`).toLocaleDateString([], {
-  weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
-});
+const formatDate = (date) => {
+  const d = date instanceof Date ? date : new Date(date);
+
+  return d.toLocaleDateString("en-IN", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+};
 
 const getErrorMessage = (error) => error.response?.data?.message
   || (error.code === 'ERR_NETWORK' ? 'Unable to reach the attendance server.' : 'Something went wrong. Please try again.');
@@ -34,7 +41,8 @@ const LEAVE_TYPES = [
 export default function EmployeeDashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  // const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const date = new Date();
   const [attendance, setAttendance] = useState(null);
   const [loading, setLoading] = useState(true);
   const [action, setAction] = useState('');
@@ -69,7 +77,7 @@ export default function EmployeeDashboard() {
     setLoading(true);
     try {
       const response = await api.get('/attendance/today');
-      setDate(response.data.date);
+      // setDate(response.data.date);
       setAttendance(response.data.attendance);
     } catch (error) {
       setMessage({ type: 'error', text: getErrorMessage(error) });
