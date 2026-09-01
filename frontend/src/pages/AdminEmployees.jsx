@@ -21,6 +21,7 @@ export default function AdminEmployees() {
   const [editingId, setEditingId] = useState('');
   const [salaryForm, setSalaryForm] = useState({ basicSalary: '', allowances: '' });
   const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState('');
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [newEmployee, setNewEmployee] = useState(emptyNewEmployee);
@@ -99,6 +100,41 @@ export default function AdminEmployees() {
     }
   };
 
+  const toggleEmployeeStatus = async (emp) => {
+    const action = emp.isActive ? 'deactivate' : 'activate';
+    if (!window.confirm(`Are you sure you want to ${action} ${emp.name}?`)) return;
+
+    setMessage({ type: '', text: '' });
+    try {
+      await api.put(`/admin/employees/${emp._id}/status`, { isActive: !emp.isActive });
+      setMessage({ type: 'success', text: `${emp.name} ${action}d successfully` });
+      loadEmployees();
+    } catch (error) {
+      setMessage({ type: 'error', text: getErrorMessage(error) });
+    }
+  };
+
+  const deleteEmployee = async (emp) => {
+    const confirmText = `Type DELETE to permanently remove ${emp.name} (${emp.employeeId}). This cannot be undone.`;
+    const typed = window.prompt(confirmText);
+    if (typed !== 'DELETE') {
+      if (typed !== null) setMessage({ type: 'error', text: 'Deletion cancelled — text did not match.' });
+      return;
+    }
+
+    setDeletingId(emp._id);
+    setMessage({ type: '', text: '' });
+    try {
+      await api.delete(`/admin/employees/${emp._id}`);
+      setMessage({ type: 'success', text: `${emp.name} deleted permanently` });
+      loadEmployees();
+    } catch (error) {
+      setMessage({ type: 'error', text: getErrorMessage(error) });
+    } finally {
+      setDeletingId('');
+    }
+  };
+
   return (
     <main className="employee-dashboard phase-one-dashboard">
       <header className="employee-header">
@@ -126,8 +162,13 @@ export default function AdminEmployees() {
             {employees.map((emp) => (
               <div key={emp._id} className="employee-row">
                 <div className="employee-row-main">
-                  <strong>{emp.name}</strong>
-                  <span className="employee-row-sub">{emp.employeeId} · {emp.designation || '—'} · {emp.department || '—'}</span>
+                  <Link to={`/admin/employees/${emp._id}`} className="employee-name-link">
+                    <strong>{emp.name}</strong>
+                  </Link>
+                  <span className="employee-row-sub">
+                    {emp.employeeId} · {emp.designation || '—'} · {emp.department || '—'}
+                    {!emp.isActive && <span style={{ color: '#e74c3c', marginLeft: '8px' }}>· INACTIVE</span>}
+                  </span>
                 </div>
 
                 {editingId === emp._id ? (
@@ -155,6 +196,19 @@ export default function AdminEmployees() {
                         : 'No salary set'}
                     </span>
                     <button className="btn-secondary" onClick={() => startEdit(emp)}>Edit salary</button>
+                    <button
+                      className={emp.isActive ? 'btn-reject' : 'btn-approve'}
+                      onClick={() => toggleEmployeeStatus(emp)}
+                    >
+                      {emp.isActive ? 'Deactivate' : 'Activate'}
+                    </button>
+                    <button
+                      className="btn-reject"
+                      disabled={deletingId === emp._id}
+                      onClick={() => deleteEmployee(emp)}
+                    >
+                      {deletingId === emp._id ? 'Deleting...' : 'Delete'}
+                    </button>
                   </div>
                 )}
               </div>
@@ -202,12 +256,13 @@ export default function AdminEmployees() {
                   onChange={(e) => setNewEmployee({ ...newEmployee, email: e.target.value })}
                   placeholder="ravi@kickmac.com"
                   required
+                  autoComplete="off"
                 />
               </div>
 
               <div className="form-row">
                 <div className="form-group">
-                  <label>Phone</label>
+                  <label>Phone (optional)</label>
                   <input
                     type="text"
                     value={newEmployee.phone}
@@ -246,6 +301,7 @@ export default function AdminEmployees() {
                     placeholder="At least 6 characters"
                     minLength={6}
                     required
+                    autoComplete="new-password"
                   />
                   <button
                     type="button"

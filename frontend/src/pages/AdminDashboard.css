@@ -368,3 +368,18 @@
   font-size: 1rem;
   padding: 4px;
 }
+.employee-name-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.employee-name-link:hover strong {
+  color: #ff4d29;
+}
+
+.employee-salary-view {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}

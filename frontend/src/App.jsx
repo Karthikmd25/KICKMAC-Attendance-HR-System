@@ -7,6 +7,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminEmployees from './pages/AdminEmployees';
 import AdminSalary from './pages/AdminSalary';
 import AdminReports from './pages/AdminReports';
+import AdminEmployeeDetail from './pages/AdminEmployeeDetail';
 import './App.css';
 
 function App() {
@@ -52,6 +53,14 @@ function App() {
             element={
               <ProtectedRoute allowedRole="admin">
                 <AdminReports />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/admin/employees/:employeeId"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <AdminEmployeeDetail />
               </ProtectedRoute>
             }
           />
