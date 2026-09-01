@@ -284,3 +284,83 @@ exports.setEmployeeStatus = async (req, res) => {
     res.status(500).json({ message: 'Server error while updating employee status' });
   }
 };
+// @desc Admin: permanently delete an employee (hard delete)
+// @route DELETE /api/admin/employees/:employeeId
+exports.deleteEmployee = async (req, res) => {
+  try {
+    const { employeeId } = req.params;
+    const User = require('../models/User');
+
+    const employee = await Employee.findById(employeeId);
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    if (employee.user.toString() === req.user._id.toString()) {
+      return res.status(400).json({ message: 'You cannot delete your own account' });
+    }
+
+    await User.findByIdAndDelete(employee.user);
+    await Employee.findByIdAndDelete(employeeId);
+
+    res.json({ message: 'Employee deleted permanently' });
+  } catch (error) {
+    console.error('Delete employee error:', error.message);
+    res.status(500).json({ message: 'Server error while deleting employee' });
+  }
+};
+
+// @desc Admin: get full detail for one employee (profile + history)
+// @route GET /api/admin/employees/:employeeId/detail
+exports.getEmployeeDetail = async (req, res) => {
+  try {
+    const { employeeId } = req.params;
+    const Attendance = require('../models/Attendance');
+    const LeaveRequest = require('../models/LeaveRequest');
+    const PermissionRequest = require('../models/PermissionRequest');
+    const RegularisationRequest = require('../models/RegularisationRequest');
+    const OutsideVisit = require('../models/OutsideVisit');
+    const Salary = require('../models/Salary');
+
+    const employee = await Employee.findById(employeeId);
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    const User = require('../models/User');
+    const user = await User.findById(employee.user).select('email isActive');
+
+    const [attendance, leave, permission, regularisation, outsideVisits, salary] = await Promise.all([
+      Attendance.find({ employee: employeeId }).sort({ date: -1 }).limit(30),
+      LeaveRequest.find({ employee: employeeId }).sort({ createdAt: -1 }).limit(20),
+      PermissionRequest.find({ employee: employeeId }).sort({ createdAt: -1 }).limit(20),
+      RegularisationRequest.find({ employee: employeeId }).sort({ createdAt: -1 }).limit(20),
+      OutsideVisit.find({ employee: employeeId }).sort({ createdAt: -1 }).limit(20),
+      Salary.findOne({ employee: employeeId }),
+    ]);
+
+    res.json({
+      profile: {
+        _id: employee._id,
+        employeeId: employee.employeeId,
+        name: employee.name,
+        email: user?.email,
+        phone: employee.phone,
+        department: employee.department,
+        designation: employee.designation,
+        joiningDate: employee.joiningDate,
+        isActive: employee.isActive,
+        leaveBalance: employee.leaveBalance,
+      },
+      salary,
+      attendance,
+      leave,
+      permission,
+      regularisation,
+      outsideVisits,
+    });
+  } catch (error) {
+    console.error('Get employee detail error:', error.message);
+    res.status(500).json({ message: 'Server error while fetching employee detail' });
+  }
+};

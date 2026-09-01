@@ -7,6 +7,8 @@ const {
   getAllEmployees,
   createEmployee,
   setEmployeeStatus,
+  deleteEmployee,
+  getEmployeeDetail,
   getMonthlyAttendanceReport,
   getLeaveReport,
 } = require('../controllers/adminController');
@@ -44,6 +46,8 @@ router.get('/attendance/today', getTodayAttendanceAll);
 router.get('/employees', getAllEmployees);
 router.post('/employees', createEmployee);
 router.put('/employees/:employeeId/status', setEmployeeStatus);
+router.delete('/employees/:employeeId', deleteEmployee);
+router.get('/employees/:employeeId/detail', getEmployeeDetail);
 router.get('/permission', getAllPermissionRequests);
 router.put('/permission/:id', reviewPermissionRequest);
 router.get('/leave', getAllLeaveRequests);
