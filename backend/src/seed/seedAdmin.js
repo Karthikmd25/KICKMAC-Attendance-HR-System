@@ -6,7 +6,7 @@ const Employee = require('../models/Employee');
 const seed = async () => {
   await connectDB();
 
-  const email = 'admin@kickmac.com';
+  const email = 'admin@staffonly.com';
   const existing = await User.findOne({ email });
   if (existing) {
     console.log('Admin already exists:', existing.email);

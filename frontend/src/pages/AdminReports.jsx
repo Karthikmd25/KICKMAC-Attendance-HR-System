@@ -93,7 +93,7 @@ export default function AdminReports() {
     if (!report || report.length === 0) return;
     const doc = new jsPDF();
     doc.setFontSize(14);
-    doc.text(`KICKMAC - ${reportTitle}`, 14, 15);
+    doc.text(`STAFFONLY - ${reportTitle}`, 14, 15);
     doc.setFontSize(10);
     doc.text(`${MONTHS[month - 1]} ${year}`, 14, 22);
 
@@ -111,7 +111,7 @@ export default function AdminReports() {
   return (
     <main className="employee-dashboard phase-one-dashboard">
       <header className="employee-header">
-        <div className="brand-lockup"><span className="brand-mark">K</span><span>KICKMAC</span></div>
+        <div className="brand-lockup"><span className="brand-mark">SO</span><span>STAFFONLY</span></div>
         <div className="header-title"><span>Workspace</span><h1>Reports</h1></div>
         <div className="employee-identity"><strong>{user?.name || 'Admin'}</strong><span>{user?.employeeId || 'Admin'} / Admin</span><button className="btn-secondary" onClick={handleLogout}>Log out</button></div>
       </header>

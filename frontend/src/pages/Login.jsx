@@ -34,7 +34,7 @@ export default function Login() {
     <div className="login-page">
       <div className="login-card">
         <h1 className="login-title">
-          KICK<span className="accent">MAC</span>
+          STAFF<span className="accent">ONLY</span>
         </h1>
         <p className="login-subtitle">Attendance & HR Management</p>
 
@@ -45,7 +45,7 @@ export default function Login() {
               type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@kickmac.com"
+              placeholder="you@staffonly.com"
               required
             />
           </div>

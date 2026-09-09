@@ -5,7 +5,7 @@ const User = require('../models/User');
 const run = async () => {
   await connectDB();
 
-  const email = 'karthik@kickmac.com';
+  const email = 'karthik@staffonly.com';
   const newPassword = 'test123';
 
   const user = await User.findOne({ email });

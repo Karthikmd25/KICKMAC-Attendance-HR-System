@@ -58,7 +58,7 @@ export default function AdminEmployeeDetail() {
   return (
     <main className="employee-dashboard phase-one-dashboard">
       <header className="employee-header">
-        <div className="brand-lockup"><span className="brand-mark">K</span><span>KICKMAC</span></div>
+        <div className="brand-lockup"><span className="brand-mark">SO</span><span>STAFFONLY</span></div>
         <div className="header-title"><span>Workspace</span><h1>Employee Detail</h1></div>
         <div className="employee-identity"><strong>{user?.name || 'Admin'}</strong><span>{user?.employeeId || 'Admin'} / Admin</span><button className="btn-secondary" onClick={handleLogout}>Log out</button></div>
       </header>

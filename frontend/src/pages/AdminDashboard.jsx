@@ -190,7 +190,7 @@ export default function AdminDashboard() {
   return (
     <main className="employee-dashboard phase-one-dashboard">
       <header className="employee-header">
-        <div className="brand-lockup"><span className="brand-mark">K</span><span>KICKMAC</span></div>
+        <div className="brand-lockup"><span className="brand-mark">SO</span><span>STAFFONLY</span></div>
         <div className="header-title"><span>Workspace</span><h1>Admin Dashboard</h1></div>
         <div className="employee-identity">
           <NotificationBell />

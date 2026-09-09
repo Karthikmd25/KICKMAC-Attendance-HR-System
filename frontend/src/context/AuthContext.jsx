@@ -8,7 +8,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('kickmac_user');
+    const storedUser = localStorage.getItem('staffonly_user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
@@ -19,16 +19,16 @@ export function AuthProvider({ children }) {
     const response = await api.post('/auth/login', { email, password });
     const { token, user } = response.data;
 
-    localStorage.setItem('kickmac_token', token);
-    localStorage.setItem('kickmac_user', JSON.stringify(user));
+    localStorage.setItem('staffonly_token', token);
+    localStorage.setItem('staffonly_user', JSON.stringify(user));
     setUser(user);
 
     return user;
   };
 
   const logout = () => {
-    localStorage.removeItem('kickmac_token');
-    localStorage.removeItem('kickmac_user');
+    localStorage.removeItem('staffonly_token');
+    localStorage.removeItem('staffonly_user');
     setUser(null);
   };
 

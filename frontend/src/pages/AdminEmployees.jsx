@@ -138,7 +138,7 @@ export default function AdminEmployees() {
   return (
     <main className="employee-dashboard phase-one-dashboard">
       <header className="employee-header">
-        <div className="brand-lockup"><span className="brand-mark">K</span><span>KICKMAC</span></div>
+        <div className="brand-lockup"><span className="brand-mark">SO</span><span>STAFFONLY</span></div>
         <div className="header-title"><span>Workspace</span><h1>Employees</h1></div>
         <div className="employee-identity"><strong>{user?.name || 'Admin'}</strong><span>{user?.employeeId || 'Admin'} / Admin</span><button className="btn-secondary" onClick={handleLogout}>Log out</button></div>
       </header>
@@ -254,7 +254,7 @@ export default function AdminEmployees() {
                   type="email"
                   value={newEmployee.email}
                   onChange={(e) => setNewEmployee({ ...newEmployee, email: e.target.value })}
-                  placeholder="ravi@kickmac.com"
+                  placeholder="ravi@staffonly.com"
                   required
                   autoComplete="off"
                 />
