@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://staffonly-attendance-api.onrender.com/api',
+  baseURL: 'https://kickmac-attendance-api.onrender.com/api',
 });
 
 // Attach the JWT token to every request automatically, if present
