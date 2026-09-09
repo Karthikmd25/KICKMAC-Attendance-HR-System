@@ -10,7 +10,16 @@ const outsideVisitRoutes = require('./routes/outsideVisitRoutes');
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: 'https://kickmac-attendance-hr-system.netlify.app',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+  })
+);
+app.options('*', cors());
+
 app.use(express.json({ limit: '10mb' }));
 
 app.get('/api/health', (req, res) => {
